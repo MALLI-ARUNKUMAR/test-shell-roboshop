@@ -19,18 +19,18 @@ mkdir -p $LOGS_FOLDER
 
 VALIDATE () {
     if [ $1 -ne 0 ]; then
-        echo -e " $2 ....$R FAILURE $N" | tee -a $LOG_FILE
+        echo  " $2 .... FAILURE " | tee -a $LOG_FILE
         exit 1
     else
-        echo -e "$2 ....$G SUCCESS $N" | tee -a $LOG_FILE
+        echo  "$2 .... SUCCESS " | tee -a $LOG_FILE
     fi 
 }
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo >>$LOG_FILE
-VALIDATE $? -e "$G copying the mongo.repo file $N"
+VALIDATE $? - "copying the mongo.repo file"
 
 dnf install mongodb-org -y >>$LOG_FILE
-VALIDATE $? "installing MongoDB"
+VALIDATE $?  "installing MongoDB"
 
 systemctl enable mongod >>$LOG_FILE
 VALIDATE $? "enabling MongoDB"
