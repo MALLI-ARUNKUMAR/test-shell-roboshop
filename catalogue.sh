@@ -52,7 +52,7 @@ VALIDATE $? "downloading catalogue zip file"
 cd /app
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/catalogue.zip
+unzip -o /tmp/catalogue.zip
 VALIDATE $? "unzipping catalogue zip file"
 
 cd /app 
