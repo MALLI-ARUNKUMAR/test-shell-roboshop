@@ -29,7 +29,7 @@ instance_id=$(aws ec2 run-instances \
     fi
     echo "ip is $ip $instance " 
 
-   Route53=$( aws route53 change-resource-record-sets \
+  aws route53 change-resource-record-sets \
   --hosted-zone-id $HOSTED_ZONE_ID \
   --change-batch '{
     "Comment": "Update A record with new IP address",
@@ -49,7 +49,6 @@ instance_id=$(aws ec2 run-instances \
       }
     ]
   }'
-
-   )
+  
    
 done    
