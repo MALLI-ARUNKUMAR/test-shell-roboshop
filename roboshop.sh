@@ -19,7 +19,7 @@ instance_id=$(aws ec2 run-instances \
         --output text)
     else
         ip=$(aws ec2 describe-instances \
-        --instance-ids $instance_id \
+        --instance-ids "$instance_id" \
         --query 'Reservations[0].Instances[0].PrivateIpAddress' \
         --output text)
     fi
