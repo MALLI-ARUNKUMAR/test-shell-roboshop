@@ -63,3 +63,6 @@ VALIDATE $? "installing nodejs dependencies"
 
 cp catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "creating the systemctl service"
+
+systemctl daemon-reload
+VALIDATE $? "daemon-reload"
