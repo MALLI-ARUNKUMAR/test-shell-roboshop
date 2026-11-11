@@ -4,11 +4,24 @@ SECURITY_GROUP_ID="sg-03326489dae6d8836"
 
 for INSTANCE in $@
 do
-aws ec2 run-instances \
+instance_id=$(aws ec2 run-instances \
     --image-id $AMI_ID \
     --instance-type t3.micro \
     --security-group-ids $SECURITY_GROUP_ID \
-    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]' \
-    --query 'Instances[*].PrivateIpAddress' \
-    --output text
+    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$instance}]' \
+    --query 'Instances[0].InstanceId' \
+    --output text)
+
+    if [$instance == frontend] ; then
+        ip=$(aws ec2 describe-instances \
+        --instance-ids $instance_id \
+        --query 'Reservations[0].Instances[0].PublicIpAddress' \
+        --output text)
+    else
+        ip=$(aws ec2 describe-instances \
+        --instance-ids $instance_id \
+        --query 'Reservations[0].Instances[0].PrivateIpAddress' \
+        --output text)
+    fi
+    echo "ip is $ip $instance "    
 done    
