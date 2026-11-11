@@ -66,3 +66,11 @@ VALIDATE $? "creating the systemctl service"
 
 systemctl daemon-reload
 VALIDATE $? "daemon-reload"
+
+systemctl enable catalogue 
+VALIDATE $? "enabling the catalogue"
+
+systemctl start catalogue
+VALIDATE $? "start the catalogue"
+
+
