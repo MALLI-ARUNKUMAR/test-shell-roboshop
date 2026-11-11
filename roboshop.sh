@@ -2,7 +2,7 @@
 AMI_ID="ami-0055977a6e828a4f4"
 SECURITY_GROUP_ID="sg-03326489dae6d8836"
 
-for INSTANCE in $@
+for instance in $@
 do
 instance_id=$(aws ec2 run-instances \
     --image-id $AMI_ID \
