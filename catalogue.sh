@@ -50,13 +50,13 @@ curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue
 VALIDATE $? "downloading catalogue zip file"
 
 cd /app
-VALIDATE $? "changing directory to /app"
+VALIDATE $? "changing directory to app"
 
 unzip /tmp/catalogue.zip
 VALIDATE $? "unzipping catalogue zip file"
 
 cd /app 
-VALIDATE $? "changing directory to /app"
+VALIDATE $? "changing directory to app"
 
 npm install 
 VALIDATE $? "installing nodejs dependencies"
