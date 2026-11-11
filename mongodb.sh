@@ -27,19 +27,19 @@ VALIDATE () {
 }
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo $>>$LOG_FILE
-VALIDATE $? -e " $G copying the mongo.repo file $N"
+VALIDATE $? "copying the mongo.repo file"
 
 dnf install mongodb-org -y $>>$LOG_FILE
-VALIDATE $? -e " $G installing MongoDB $N"
+VALIDATE $? "installing MongoDB"
 
 systemctl enable mongod $>>$LOG_FILE
-VALIDATE $? -e " $B enabling MongoDB $N"
+VALIDATE $? "enabling MongoDB"
 
 systemctl start mongod $>>$LOG_FILE
-VALIDATE $? -e " $Y starting MongoDB $N"
+VALIDATE $? "starting MongoDB"
 
 sed -i 's/127.0.0.1/0.0.0.0 /g' /etc/mongod.conf $>>$LOG_FILE
-VALIDATE $? -e " $B updating the bind_ip in mongod.conf $N"
+VALIDATE $? "updating the bind_ip in mongod.conf"
 
 systemctl restart mongod $>>$LOG_FILE
-VALIDATE $? -e " $Y restarting MongoDB $N"
+VALIDATE $? "restarting MongoDB"
