@@ -49,6 +49,6 @@ instance_id=$(aws ec2 run-instances \
       }
     ]
   }'
-  
+echo " record updated for $RECORD_NAME with ip $ip"  
    
 done    
