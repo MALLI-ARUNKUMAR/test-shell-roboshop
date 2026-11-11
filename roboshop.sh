@@ -42,7 +42,7 @@ instance_id=$(aws ec2 run-instances \
           "TTL": 1,
           "ResourceRecords": [
             {
-              "Value": "$ip"
+              "Value": "'$ip'"
             }
           ]
         }
