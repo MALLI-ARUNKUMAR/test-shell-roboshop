@@ -2,12 +2,12 @@
 
 USER_ID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
-LOGS_FILE="$LOGS_FOLDER.$0/log"
+LOG_FILE="$LOGS_FOLDER/$0.log"
 
-R='\e[31m'
-G='\e[32m'
-Y='\e[33m'
-B='\e[34m'
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+B="\e[34m"
 
 if [ $USER_ID -ne 0 ] ; then
     echo "you are not root user. Please run the script as root user "
@@ -24,18 +24,18 @@ VALIDATE () {
     fi        
 }
 
-dnf module disable redis -y >>$LOGS_FILE
+dnf module disable redis -y >>$LOG_FILE
 $VALIDATE $? "disbale the default version redis version"
 
-dnf module enable redis:7 -y >>$LOGS_FILE
+dnf module enable redis:7 -y >>$LOG_FILE
 $VALIDATE $? "enabling the redis 7 version"
 
-dnf install redis -y >>$LOGS_FILE
+dnf install redis -y >>$LOG_FILE
 $VALIDATE $? "installing the redis "
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e 's/protected-mode yes/protected-mode no/' /etc/redis/redis.conf >>$LOGS_FILE
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e 's/protected-mode yes/protected-mode no/' /etc/redis/redis.conf >>$LOG_FILE
 VALIDATE $? "enabling the remote connection"
 
 systemctl enable redis 
-systemctl start redis >>$LOGS_FILE
+systemctl start redis >>$LOG_FILE
 $VALIDATE $? "enable and start the redis"
