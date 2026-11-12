@@ -4,7 +4,7 @@ USER_ID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOG_FILE="$LOGS_FOLDER/$0.log"
 SCRIPT_DIR=$PWD
-MONGODB_HOST=daws880s.online
+MONGODB_HOST=mongodb.daws880s.online
 
 R="\e[31m"
 G="\e[32m"
