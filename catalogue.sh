@@ -3,6 +3,7 @@
 USER_ID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOG_FILE="$LOGS_FOLDER/$0.log"
+SCRIPT_DIR=$PWD
 
 R="\e[31m"
 G="\e[32m"
@@ -26,13 +27,13 @@ VALIDATE () {
     fi 
 }
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disabling the nodejs module"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "enabling the nodejs module"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "installing nodejs"
 
 id roboshop &>>$LOG_FILE
@@ -43,31 +44,31 @@ else
     echo "roboshop user already exists, skipping"
 fi    
 
-mkdir -p /app 
+mkdir -p /app  &>>$LOG_FILE
 VALIDATE $? "creating /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 VALIDATE $? "downloading catalogue zip file"
 
-cd /app
+cd /app &>>$LOG_FILE
 VALIDATE $? "changing directory to app"
 
-rm -rf /app/*
+rm -rf /app/* &>>$LOG_FILE
 VALIDATE $? "Removing the exisiting code"
 
-unzip -o /tmp/catalogue.zip
+unzip -o /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzipping catalogue zip file"
 
 cd /app 
 VALIDATE $? "changing directory to app"
 
-npm install 
+npm install &>>$LOG_FILE
 VALIDATE $? "installing nodejs dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "creating the systemctl service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "daemon-reload"
 
 systemctl enable catalogue 
