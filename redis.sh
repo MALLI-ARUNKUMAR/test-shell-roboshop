@@ -1,8 +1,8 @@
 #!/bin/bash
 
 USER_ID=$(id -u)
-LOGS_FOLDER="var/log/shell-script"
-LOGS_FILE=$LOGS_FOLDER.$0/log
+LOGS_FOLDER="/var/log/shell-roboshop"
+LOGS_FILE="$LOGS_FOLDER.$0/log"
 
 R='\e[31m'
 G='\e[32m'
@@ -34,12 +34,8 @@ dnf install redis -y >>$LOGS_FILE
 $VALIDATE $? "installing the redis "
 
 sed -i -e 's/127.0.0.1/0.0.0.0/g' -e 's/protected-mode yes/protected-mode no/' /etc/redis/redis.conf >>$LOGS_FILE
-
-VALIDATE $? "enabling the remote connection" 
-
-
+VALIDATE $? "enabling the remote connection"
 
 systemctl enable redis 
 systemctl start redis >>$LOGS_FILE
-
 $VALIDATE $? "enable and start the redis"
