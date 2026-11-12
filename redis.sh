@@ -33,7 +33,10 @@ VALIDATE $? "enabling the redis 7 version"
 dnf install redis -y &>>$LOG_FILE
 VALIDATE $? "installing the redis "
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e 's/protected-mode yes/protected-mode no/g' redis.conf &>>$LOG_FILE
+sed -i \
+-e 's/127.0.0.1/0.0.0.0/g' \
+-e 's/protected-mode yes/protected-mode no/g' \
+/etc/redis/redis.conf
 VALIDATE $? "enabling the remote connection"
 
 systemctl enable redis 
