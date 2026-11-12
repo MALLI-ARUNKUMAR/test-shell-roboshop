@@ -65,7 +65,7 @@ VALIDATE $? "changing directory to app"
 npm install &>>$LOG_FILE
 VALIDATE $? "installing nodejs dependencies"
 
-cp SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+cp SCRIPT_DIR /catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "creating the systemctl service"
 
 systemctl daemon-reload &>>$LOG_FILE
