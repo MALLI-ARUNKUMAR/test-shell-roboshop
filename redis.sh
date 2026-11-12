@@ -13,7 +13,7 @@ if [ $USER_ID -ne 0 ] ; then
     echo "you are not root user. Please run the script as root user "
     exit 1
 fi
-mkdir -p LOGS_FOLDER
+mkdir -p $LOGS_FOLDER
 
 VALIDATE () {
     if [ $1 -ne 0 ]; then
