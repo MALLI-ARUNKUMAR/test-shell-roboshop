@@ -50,7 +50,7 @@ mkdir /app
 VALIDATE $? "creating the app directory"
 
 curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
-VALIADTE $? "copying the code to tempory location"
+VALIDATE $? "copying the code to tempory location"
 
 cd /app 
 VALIDATE $? "moving to the app directory"
