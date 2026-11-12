@@ -4,6 +4,7 @@ USER_ID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOG_FILE="$LOGS_FOLDER/$0.log"
 SCRIPT_DIR=$PWD
+MONGODB_HOST=daws880s.online
 
 R="\e[31m"
 G="\e[32m"
@@ -77,4 +78,8 @@ VALIDATE $? "enabling the catalogue"
 systemctl start catalogue
 VALIDATE $? "start the catalogue"
 
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
+dnf install mongodb-mongosh -y
+VALIDATE $? "installing the mongodb"
 
+mongosh --host $MONGODB_HOST </app/db/master-data.js
