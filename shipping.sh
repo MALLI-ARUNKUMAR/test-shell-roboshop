@@ -77,18 +77,12 @@ VALIDATE $? "start and enable the shipping"
 
 dnf install mysql -y 
 VALIDATE $? "installing the mysql"
-
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
-VALIDATE $? "loading the db schema"
-
-
-
-# Read password without displaying it
 read -s -p "Enter MySQL root password: " MYSQL_PASSWORD
-mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
-mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD< /app/db/app-user.sql 
-mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
-
+echo
+mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
+mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD< /app/db/app-user.sql 
+mysql -h $MYSQL_HOST-uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
+VALIDATE $? "loading the db schema"
 unset MYSQL_PASSWORD
 systemctl restart shipping
 VALIDATE $? "restarting the shipping"    
