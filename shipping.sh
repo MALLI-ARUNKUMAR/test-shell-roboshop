@@ -4,6 +4,7 @@ USER_ID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 LOG_FILE="$LOGS_FOLDER/$0.log"
 SCRIPT_DIR=$PWD
+MYSQL_HOST=mysql.daws880s.online
 
 R="\e[31m"
 G="\e[32m"
@@ -77,5 +78,5 @@ VALIDATE $? "start and enable the shipping"
 dnf install mysql -y 
 VALIDATE $? "installing the mysql"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/schema.sql
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
 VALIDATE $? "loading the db schema"
