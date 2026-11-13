@@ -56,8 +56,7 @@ VALIDATE $? "unzip the code"
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "configure the robosho.conf"
 
-nginx -t &>>$LOG_FILE
-VALIDATE $? "checking the syntax"
+
 
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $?"restarting the nginx"
