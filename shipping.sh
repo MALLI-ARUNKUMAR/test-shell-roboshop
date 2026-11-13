@@ -50,7 +50,7 @@ VALIDATE $? "copying the code to temp location"
 cd /app &>>$LOG_FILE
 VALIDATE $? "moving to the app directory"
 
-rm -rf /app/ * &>>$LOG_FILE
+rm -rf /app/* &>>$LOG_FILE
 VALIDATE $? "removing the app directory unwamted files"
 
 unzip /tmp/shipping.zip &>>$LOG_FILE
