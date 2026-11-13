@@ -44,7 +44,7 @@ VALIDATE  $? "start and enable the nginx"
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "removing the default version"
 
-curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>>$LOG_FILE
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "download the code"
 
 cd /usr/share/nginx/html &>>$LOG_FILE
@@ -53,7 +53,7 @@ VALIDATE $? "moving to the html"
 unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "unzip the code"
 
-cp $SCRIPT_DIR/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$LOG_FILE
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "configure the robosho.conf"
 
 nginx -t &>>$LOG_FILE
