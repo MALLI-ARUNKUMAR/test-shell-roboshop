@@ -54,8 +54,7 @@ VALIDATE $? "removing the unwanted files"
 cd /app &>>$LOG_FILE
 VALIDATE $? "moving to the app directory"
 
-python3.14 -m venv /app/.venv &>>$LOG_FILE
-/app/.venv/bin/pip install -r requirements.txt
+
 
 python3.14 -m venv /app/.venv &>>$LOG_FILE
 VALIDATE $? "Creating virtual environment"
