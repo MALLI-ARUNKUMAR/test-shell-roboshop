@@ -28,37 +28,37 @@ VALIDATE () {
 
 }
 
-dnf module disable nginx -y &>>$SCRIPT_DIR
+dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? "disabling the default version of the nginx"
 
-dnf module enable nginx:1.26 -y &>>$SCRIPT_DIR
+dnf module enable nginx:1.26 -y &>>$LOG_FILE
 VALIDATE $? "enable the nginx "
 
-dnf install nginx -y &>>$SCRIPT_DIR
+dnf install nginx -y &>>$LOG_FILE
 VALIDATE $? "install the nginx"
 
-systemctl enable nginx &>>$SCRIPT_DIR
+systemctl enable nginx &>>$LOG_FILE
 systemctl start nginx
 VALIDATE  $? "start and enable the nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$SCRIPT_DIR
+rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
 VALIDATE $? "removing the default version"
 
-curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>>$SCRIPT_DIR
+curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>>$LOG_FILE
 VALIDATE $? "download the code"
 
-cd /usr/share/nginx/html &>>$SCRIPT_DIR
+cd /usr/share/nginx/html &>>$LOG_FILE
 VALIDATE $? "moving to the html"
 
-unzip /tmp/frontend.zip &>>$SCRIPT_DIR
+unzip /tmp/frontend.zip &>>$LOG_FILE
 VALIDATE $? "unzip the code"
 
-cp $SCRIPT_DIR/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$SCRIPT_DIR
+cp $SCRIPT_DIR/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$LOG_FILE
 VALIDATE $? "configure the robosho.conf"
 
-nginx -t &>>$SCRIPT_DIR
+nginx -t &>>$LOG_FILE
 VALIDATE $? "checking the syntax"
 
-systemctl restart nginx &>>$SCRIPT_DIR
+systemctl restart nginx &>>$LOG_FILE
 VALIDATE $?"restarting the nginx"
 
