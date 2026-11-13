@@ -1,60 +1,63 @@
 #!/bin/bash
 
-USER_ID=$(id -u)
-LOGS_FOLDER="/var/log/shell-roboshop"
-LOG_FILE="$LOGS_FOLDER/$0.log"
-SCRIPT_DIR=$PWD
-
+user_id=$(id -u)
+logs_folder="/var/log/roboshop"
+logs_file="${logs_folder}/${0}.log"
+domain_name="daws880s.online"
+scripts_dir=$(dirname "$(realpath "$0")")
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
-B="\e[34m"
 N="\e[0m"
 
-
-if [ $USER_ID -ne 0 ]; then
-    echo"user is not root user please run the script using the root user"
+if [ $user_id -ne 0 ]; then
+    echo "Please run this script with sudo access.."
     exit 1
 fi
 
-mkdir -p $LOGS_FOLDER
+mkdir -p $logs_folder
 
-VALIDATE () {
-    if [ $1 -ne 0 ]; then
-        echo "$2 ....FAILURE"
-    else
-        echo "$2....SUCCESS" 
-    fi       
-
+timestamp(){
+    date "+%F %T" 
 }
 
-dnf module disable nginx -y &>>$LOG_FILE
-VALIDATE $? "disabling the default version of the nginx"
+validate(){
+    if [ $1 -ne 0 ]; then
+        echo -e "$(timestamp) [ERROR] ${2}..${R}FAILED${N}" | tee -a $logs_file
+        exit 1
+    else
+        echo -e "$(timestamp) [INFO] ${2}..${G}SUCCESS${N}" | tee -a $logs_file
+    fi
+}
 
-dnf module enable nginx:1.24 -y &>>$LOG_FILE
-VALIDATE $? "enable the nginx "
+echo "$(timestamp) [INFO] ==== Script started Execution =====" | tee -a $logs_file
+ 
+dnf module disable nginx -y &>>$logs_file
+dnf module enable nginx:1.26 -y &>>$logs_file
+dnf install nginx -y &>>$logs_file
+validate $? "Installing nginx"
 
-dnf install nginx -y &>>$LOG_FILE
-VALIDATE $? "install the nginx"
+systemctl enable nginx &>>$logs_file
+systemctl start nginx &>>$logs_file
+validate $? "Enable and start nginx"
 
-systemctl enable nginx &>>$LOG_FILE
-systemctl start nginx
-VALIDATE  $? "start and enable the nginx"
+rm -rf /usr/share/nginx/html/* &>>$logs_file
+validate $? "Removing default nginx content"
 
-rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
-VALIDATE $? "removing the default version"
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
-VALIDATE $? "download the code"
+curl -L -o /tmp/frontend.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/frontend-v4.zip &>>$logs_file
+cd /usr/share/nginx/html &>> $logs_file
+unzip /tmp/frontend.zip &>> $logs_file
+validate $? "Downloading and unzipping frontend code"
 
-cd /usr/share/nginx/html  &>>$LOG_FILE
-VALIDATE $? "moving to the html"
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf"
+cp "$scripts_dir/roboshop.conf" /etc/nginx/default.d/roboshop.conf
+validate $? "Copied roboshop config"
 
-unzip /tmp/frontend.zip &>>$LOG_FILE
-VALIDATE $? "unzip the code"
+nginx -t &>> $logs_file
+validate $? "Nginx Configuration"
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
-VALIDATE $? "configure the robosho.conf"
-systemctl restart nginx &>>$LOG_FILE
-VALIDATE $?"restarting the nginx"
+systemctl restart nginx
+validate $? "Restarting nginx"
 
-
+echo "$(timestamp) [INFO] Script completed in $SECONDS seconds"
+echo "$(timestamp) [INFO] ==== Script completed Execution =====" | tee -a $logs_file
