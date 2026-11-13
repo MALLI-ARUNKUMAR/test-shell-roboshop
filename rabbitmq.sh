@@ -38,12 +38,9 @@ systemctl enable rabbitmq-server &>>$LOG_FILE
 systemctl start rabbitmq-server
 VALIDATE $? "start and enable the rabbitmq-server"
 
-read -s -p "Enter MySQL root password: " MYSQL_PASSWORD 
-rabbitmqctl add_user roboshop "$MYSQL_PASSWORD" &>>$LOG_FILE
+ 
+rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
 VALIDATE $? "creating the user and assign the password"
-
-# Clear password variable
-unset MYSQL_PASSWORD
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 VALIDATE $? "set permission"
