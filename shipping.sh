@@ -79,10 +79,16 @@ dnf install mysql -y
 VALIDATE $? "installing the mysql"
 read -s -p "Enter MySQL root password: " MYSQL_PASSWORD
 echo
-mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
-mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/app-user.sql 
-mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
-VALIDATE $? "loading the db schema"
+mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD -e 'use cities'
+    if [ $? -ne 0] ; then
+        mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
+        mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/app-user.sql 
+        mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
+        VALIDATE $? "loading the db schema"
+    else
+        echo "db schema alreday loaded...$Y skipping $N "
+    fi    
+
 unset MYSQL_PASSWORD
 systemctl restart shipping
 VALIDATE $? "restarting the shipping"    
