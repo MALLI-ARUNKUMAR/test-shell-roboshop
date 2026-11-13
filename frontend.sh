@@ -31,7 +31,7 @@ VALIDATE () {
 dnf module disable nginx -y &>>$LOG_FILE
 VALIDATE $? "disabling the default version of the nginx"
 
-dnf module enable nginx:1.26 -y &>>$LOG_FILE
+dnf module enable nginx:1.24 -y &>>$LOG_FILE
 VALIDATE $? "enable the nginx "
 
 dnf install nginx -y &>>$LOG_FILE
@@ -41,13 +41,12 @@ systemctl enable nginx &>>$LOG_FILE
 systemctl start nginx
 VALIDATE  $? "start and enable the nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
+rm -rf /usr/share/nginx/html/*  &>>$LOG_FILE
 VALIDATE $? "removing the default version"
-
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
 VALIDATE $? "download the code"
 
-cd /usr/share/nginx/html &>>$LOG_FILE
+cd /usr/share/nginx/html  &>>$LOG_FILE
 VALIDATE $? "moving to the html"
 
 unzip /tmp/frontend.zip &>>$LOG_FILE
@@ -55,9 +54,7 @@ VALIDATE $? "unzip the code"
 
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOG_FILE
 VALIDATE $? "configure the robosho.conf"
-
-
-
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $?"restarting the nginx"
+
 
