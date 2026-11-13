@@ -80,3 +80,16 @@ VALIDATE $? "installing the mysql"
 
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
 VALIDATE $? "loading the db schema"
+
+DB_EXISTS=$(mysql -h "$MYSQL_SERVER" -uroot -p"$MYSQL_SERVER" -Nse \
+"SHOW DATABASES LIKE 'cities';")
+
+    if [ "$DB_EXISTS" == "cities" ]; then
+        echo "Database already exists. Skipping schema creation."
+    else
+        echo "Database does not exist. Loading schema."
+        mysql -h "$MYSQL_SERVER" -uroot -p"$MYSQL_SERVER" < /app/db/schema.sql
+        VALIDATE $? "Loading Schema"
+    fi
+systemctl restart shipping
+VALIDATE $? "restarting the shipping"    
