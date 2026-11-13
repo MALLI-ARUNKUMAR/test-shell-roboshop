@@ -81,24 +81,13 @@ VALIDATE $? "installing the mysql"
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql
 VALIDATE $? "loading the db schema"
 
-MYSQL_SERVER="mysql.daws880s.online"
+
 
 # Read password without displaying it
 read -s -p "Enter MySQL root password: " MYSQL_PASSWORD
-echo
-
-# Check whether database exists
-DB_EXISTS=$(mysql -h "$MYSQL_HOST" -uroot -p"$MYSQL_PASSWORD" -Nse \
-"SHOW DATABASES LIKE 'cities';")
-
-    if [ "$DB_EXISTS" == "cities" ]; then
-        echo "Database already exists. Skipping schema creation."
-    else
-        echo "Database does not exist. Loading schema."
-
-        mysql -h "$MYSQL_HOST" -uroot -p"$MYSQL_PASSWORD" < /app/db/schema.sql
-        VALIDATE $? "Loading Schema"
-    fi
+mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
+mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD< /app/db/app-user.sql 
+mysql -h MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
 
 unset MYSQL_PASSWORD
 systemctl restart shipping
