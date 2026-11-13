@@ -81,7 +81,7 @@ read -s -p "Enter MySQL root password: " MYSQL_PASSWORD
 echo
 mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/schema.sql
 mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/app-user.sql 
-mysql -h $MYSQL_HOST-uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
+mysql -h $MYSQL_HOST -uroot -p$MYSQL_PASSWORD < /app/db/master-data.sql
 VALIDATE $? "loading the db schema"
 unset MYSQL_PASSWORD
 systemctl restart shipping
