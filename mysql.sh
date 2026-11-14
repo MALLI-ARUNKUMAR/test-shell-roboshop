@@ -30,15 +30,7 @@ VALIDATE $? "installing the mysql-server"
 systemctl enable mysqld
 systemctl start mysqld  &>>$LOG_FILE
 VALIDATE $? "start and enable the mysqld"
-
-# Set MySQL root password securely
-read -s -p "Enter MySQL root password: " MYSQL_PASSWORD
-echo
-
-mysql_secure_installation --set-root-pass "$MYSQL_PASSWORD" &>>$LOG_FILE
+mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOG_FILE
 VALIDATE $? "assigning the password"
 
-# Clear password variable
-unset MYSQL_PASSWORD
 
-echo "MySQL installation completed successfully!"
