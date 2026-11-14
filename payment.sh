@@ -28,7 +28,7 @@ VALIDATE () {
 
 }
 
-dnf install python3.14 python3.14-pip -y &>>$LOG_FILE
+dnf install python3 gcc python3-devel -y &>>$LOG_FILE
 VALIDATE $? "installing the python version"
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
@@ -42,7 +42,7 @@ fi
 mkdir -p /app &>>$LOG_FILE
 VALIDATE $? " creating the app directory"
 
-curl -L -o /tmp/payment.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/payment-v4.zip &>>$LOG_FILE
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
 VALIDATE $? "movin application to temp directory"
 
 cd /app &>>$LOG_FILE
@@ -57,13 +57,12 @@ VALIDATE $? "unziping the code"
 cd /app &>>$LOG_FILE
 VALIDATE $? "moving to the app directory"
 
-python3.14 -m venv /app/.venv &>>$LOG_FILE
+pip3 install -r requirements.txt
 VALIDATE $? "Creating virtual environment"
 
-/app/.venv/bin/pip install -r requirements.txt &>>$LOG_FILE
-VALIDATE $? "Installing dependencies"
 
-cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
+
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
 VALIDATE $? "creating the services file "
 
 systemctl daemon-reload 
