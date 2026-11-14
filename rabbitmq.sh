@@ -29,7 +29,7 @@ VALIDATE () {
 
 }
 
-cp $SCRIPT_DIR/rabbitmq.sh /etc/yum.repos.d/rabbitmq.repo
+cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 validate $? "coping the repo"
 
 dnf install erlang rabbitmq-server -y
