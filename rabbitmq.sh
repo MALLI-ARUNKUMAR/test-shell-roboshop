@@ -30,15 +30,15 @@ VALIDATE () {
 }
 
 cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
-validate $? "coping the repo"
+VALIDATE $? "coping the repo"
 
-dnf install erlang rabbitmq-server -y
-validate $? "installling the rabbitmq server"
+dnf install erlang rabbitmq-server -y &>>$LOG_FILE
+VALIDATE $? "installling the rabbitmq server"
 
-systemctl enable rabbitmq-server
+systemctl enable rabbitmq-server &>>$LOG_FILE
 systemctl start rabbitmq-server
-validate $? "start and enable the rabbit mq"
+VALIDATE $? "start and enable the rabbit mq"
 
 rabbitmqctl add_user roboshop roboshop123
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
-validate $? "setting the permission"
+VALIDATE $? "setting the permission"
