@@ -35,7 +35,7 @@ systemctl enable nginx  &>>$LOGS_FILE
 systemctl start nginx 
 VALIDATE $? "Enabled and started nginx"
 
-rm -rf /usr/share/nginx/html/* 
+rm -rf /usr/share/nginx/html/* &>>$LOGS_FILE
 VALIDATE $? "Remove default content"
 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOGS_FILE
@@ -43,10 +43,10 @@ cd /usr/share/nginx/html
 unzip /tmp/frontend.zip &>>$LOGS_FILE
 VALIDATE $? "Downloaded and unzipped frontend"
 
-rm -rf /etc/nginx/nginx.conf
+rm -rf /etc/nginx/nginx.conf &>>$LOGS_FILE
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOGS_FILE
 VALIDATE $? "Copied our nginx conf file"
 
-systemctl restart nginx
+systemctl restart nginx &>>$LOGS_FILE
 VALIDATE $? "Restarted Nginx"
